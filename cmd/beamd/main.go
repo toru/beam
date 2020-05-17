@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/toru/beam/bookmark"
+	"github.com/toru/beam/store"
 )
 
 func main() {
@@ -13,4 +14,13 @@ func main() {
 	fmt.Println(item.ID())
 	fmt.Println(item.HexID())
 	fmt.Println(item.URL())
+
+	db := store.NewMemoryStore()
+	db.WriteBookmark(*item)
+	fmt.Println(db.Name())
+	fmt.Println(db.BookmarkCount())
+
+	for _, b := range db.Bookmarks(0) {
+		fmt.Println(b.HexID())
+	}
 }

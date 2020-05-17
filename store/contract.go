@@ -9,5 +9,6 @@ import (
 type Store interface {
 	Name() string                        // Name of the storage engine
 	Bookmarks(limit int) []bookmark.Item // List of bookmarks
+	BookmarkCount() int                  // Number of bookmarks
 	WriteBookmark(bookmark.Item) error   // Write the given bookmark
 }
