@@ -17,3 +17,8 @@ type Item struct {
 	url    url.URL // Raw internal URL representation
 	idAlgo int     // Algorithm used to generate the ID
 }
+
+// NewItem returns a pointer to a new Item.
+func NewItem() *Item {
+	return &Item{}
+}
