@@ -11,16 +11,7 @@ import (
 func main() {
 	item := bookmark.NewItem()
 	item.SetURL("https://torumk.com")
-	fmt.Println(item.ID())
-	fmt.Println(item.HexID())
-	fmt.Println(item.URL())
-
-	db := store.NewMemoryStore()
+	db, _ := store.GetStore("memory")
 	db.WriteBookmark(*item)
-	fmt.Println(db.Name())
 	fmt.Println(db.BookmarkCount())
-
-	for _, b := range db.Bookmarks(0) {
-		fmt.Println(b.HexID())
-	}
 }
