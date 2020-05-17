@@ -6,6 +6,11 @@ import (
 	"time"
 )
 
+const (
+	AlgoSHA1 = iota
+	AlgoSHA224
+)
+
 // Item represents a bookmark item.
 type Item struct {
 	ID          []byte    // Unique ID
@@ -14,11 +19,15 @@ type Item struct {
 	CreatedAt   time.Time // When the item was created
 	UpdatedAt   time.Time // When the item was last updated
 
-	url    url.URL // Raw internal URL representation
-	idAlgo int     // Algorithm used to generate the ID
+	url      url.URL // Raw internal URL representation
+	hashAlgo int     // Algorithm used to generate the ID
 }
 
 // NewItem returns a pointer to a new Item.
 func NewItem() *Item {
-	return &Item{}
+	return &Item{hashAlgo: AlgoSHA1}
+}
+
+func (item *Item) HashAlgo() int {
+	return item.hashAlgo
 }
