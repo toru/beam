@@ -28,6 +28,22 @@ func NewItem() *Item {
 	return &Item{hashAlgo: AlgoSHA1}
 }
 
+// SetURL sets the given URL string to the item
+func (item *Item) SetURL(urlStr string) error {
+	u, err := url.Parse(urlStr)
+	if err != nil {
+		return err
+	}
+	item.url = *u
+	return nil
+}
+
+// URL returns a string of the item URL
+func (item *Item) URL() string {
+	return item.url.String()
+}
+
+// HashAlgo returns the algorithm used to generate the ID.
 func (item *Item) HashAlgo() int {
 	return item.hashAlgo
 }
