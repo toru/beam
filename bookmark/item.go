@@ -2,6 +2,7 @@
 package bookmark
 
 import (
+	"crypto/sha1"
 	"net/url"
 	"time"
 )
@@ -35,6 +36,7 @@ func (item *Item) SetURL(urlStr string) error {
 		return err
 	}
 	item.url = *u
+	item.ID = hash(item.hashAlgo, urlStr)
 	return nil
 }
 
@@ -46,4 +48,12 @@ func (item *Item) URL() string {
 // HashAlgo returns the algorithm used to generate the ID.
 func (item *Item) HashAlgo() int {
 	return item.hashAlgo
+}
+
+func hash(algo int, urlStr string) []byte {
+	if algo != AlgoSHA1 {
+		return nil
+	}
+	digest := sha1.Sum([]byte(urlStr))
+	return digest[:]
 }

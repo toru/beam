@@ -10,5 +10,6 @@ import (
 func main() {
 	item := bookmark.NewItem()
 	item.SetURL("https://torumk.com")
+	fmt.Println(item.ID)
 	fmt.Println(item.URL())
 }
