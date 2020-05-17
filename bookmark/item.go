@@ -30,7 +30,7 @@ func NewItem() *Item {
 	return &Item{hashAlgo: AlgoSHA1}
 }
 
-// SetURL sets the given URL string to the item
+// SetURL sets the given URL string to the item.
 func (item *Item) SetURL(urlStr string) error {
 	u, err := url.Parse(urlStr)
 	if err != nil {
@@ -41,17 +41,17 @@ func (item *Item) SetURL(urlStr string) error {
 	return nil
 }
 
-// ID returns the unique item ID
+// ID returns the unique item ID.
 func (item *Item) ID() []byte {
 	return item.id
 }
 
-// HexID returns the hexadecimal string representation of the item ID
+// HexID returns the hexadecimal string representation of the item ID.
 func (item *Item) HexID() string {
 	return hex.EncodeToString(item.id)
 }
 
-// URL returns a string of the item URL
+// URL returns a string of the item URL.
 func (item *Item) URL() string {
 	return item.url.String()
 }
