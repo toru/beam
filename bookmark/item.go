@@ -3,6 +3,7 @@ package bookmark
 
 import (
 	"crypto/sha1"
+	"encoding/hex"
 	"net/url"
 	"time"
 )
@@ -43,6 +44,11 @@ func (item *Item) SetURL(urlStr string) error {
 // ID returns the unique item ID
 func (item *Item) ID() []byte {
 	return item.id
+}
+
+// HexID returns the hexadecimal string representation of the item ID
+func (item *Item) HexID() string {
+	return hex.EncodeToString(item.id)
 }
 
 // URL returns a string of the item URL
