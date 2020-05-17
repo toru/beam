@@ -2,16 +2,30 @@
 package main
 
 import (
-	"fmt"
+	"flag"
+	"log"
 
-	"github.com/toru/beam/bookmark"
 	"github.com/toru/beam/store"
 )
 
+type config struct {
+	Store string
+	Port  int
+}
+
+func buildConfig() config {
+	var cfg config
+	flag.StringVar(&cfg.Store, "store", "memory", "storage engine name")
+	flag.IntVar(&cfg.Port, "port", 8080, "port number to listen on")
+	flag.Parse()
+	return cfg
+}
+
 func main() {
-	item := bookmark.NewItem()
-	item.SetURL("https://torumk.com")
-	db, _ := store.GetStore("memory")
-	db.WriteBookmark(*item)
-	fmt.Println(db.BookmarkCount())
+	cfg := buildConfig()
+	_, err := store.GetStore(cfg.Store)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println("looks good")
 }

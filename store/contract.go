@@ -2,7 +2,7 @@
 package store
 
 import (
-	"errors"
+	"fmt"
 
 	"github.com/toru/beam/bookmark"
 )
@@ -18,7 +18,7 @@ type Store interface {
 // GetStore returns the specified Storage Engine.
 func GetStore(name string) (Store, error) {
 	if name != "memory" {
-		return nil, errors.New("unknown storage engine")
+		return nil, fmt.Errorf("unknown storage engine: %s", name)
 	}
 	return NewMemoryStore(), nil
 }
