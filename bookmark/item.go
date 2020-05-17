@@ -14,12 +14,12 @@ const (
 
 // Item represents a bookmark item.
 type Item struct {
-	ID          []byte    // Unique ID
 	Name        string    // Name of the item
 	Description string    // Description of the item
 	CreatedAt   time.Time // When the item was created
 	UpdatedAt   time.Time // When the item was last updated
 
+	id       []byte  // Unique ID
 	url      url.URL // Raw internal URL representation
 	hashAlgo int     // Algorithm used to generate the ID
 }
@@ -36,8 +36,13 @@ func (item *Item) SetURL(urlStr string) error {
 		return err
 	}
 	item.url = *u
-	item.ID = hash(item.hashAlgo, urlStr)
+	item.id = hash(item.hashAlgo, urlStr)
 	return nil
+}
+
+// ID returns the unique item ID
+func (item *Item) ID() []byte {
+	return item.id
 }
 
 // URL returns a string of the item URL
