@@ -8,8 +8,11 @@ import (
 )
 
 func main() {
-	cfg := buildConfig()
-	_, err := store.GetStore(cfg.Store)
+	cfg, err := buildConfig()
+	if err != nil {
+		log.Fatal(err)
+	}
+	_, err = store.GetStore(cfg.Store)
 	if err != nil {
 		log.Fatal(err)
 	}
