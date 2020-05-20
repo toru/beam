@@ -6,11 +6,23 @@ import (
 	"github.com/pelletier/go-toml"
 )
 
-const defaultStore = "memory"
+const (
+	defaultPort  = 8080
+	defaultStore = "memory"
+)
 
 type config struct {
 	Store string
 	Port  int
+}
+
+func fillMissingWithDefault(cfg *config) {
+	if cfg.Port == 0 {
+		cfg.Port = defaultPort
+	}
+	if len(cfg.Store) == 0 {
+		cfg.Store = defaultStore
+	}
 }
 
 func buildFromConfigFile(path string) (config, error) {
@@ -22,9 +34,7 @@ func buildFromConfigFile(path string) (config, error) {
 	if err := cfgTree.Unmarshal(&cfg); err != nil {
 		return cfg, err
 	}
-	if len(cfg.Store) == 0 {
-		cfg.Store = defaultStore
-	}
+	fillMissingWithDefault(&cfg)
 	return cfg, nil
 }
 
