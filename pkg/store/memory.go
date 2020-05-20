@@ -3,7 +3,7 @@ package store
 import (
 	"sync"
 
-	"github.com/toru/beam/bookmark"
+	"github.com/toru/beam/pkg/bookmark"
 )
 
 // MemoryStore is an in-memory storage engine. Consider it as a reference

@@ -4,7 +4,7 @@ package main
 import (
 	"log"
 
-	"github.com/toru/beam/store"
+	"github.com/toru/beam/pkg/store"
 )
 
 func main() {

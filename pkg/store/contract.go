@@ -4,7 +4,7 @@ package store
 import (
 	"fmt"
 
-	"github.com/toru/beam/bookmark"
+	"github.com/toru/beam/pkg/bookmark"
 )
 
 // Store is a Storage Engine interface.
