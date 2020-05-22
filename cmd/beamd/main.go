@@ -16,5 +16,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	log.Printf("TLS: %t\n", cfg.canServeTLS())
 	log.Println("looks good")
 }

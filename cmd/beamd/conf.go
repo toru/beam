@@ -56,3 +56,7 @@ func buildConfig() (config, error) {
 	}
 	return cfg, nil
 }
+
+func (c config) canServeTLS() bool {
+	return len(c.CertPath) != 0 && len(c.KeyPath) != 0
+}
