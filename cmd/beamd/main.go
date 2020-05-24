@@ -6,6 +6,9 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/toru/beam/pkg/store"
 )
@@ -19,7 +22,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Printf("TLS: %t\n", cfg.canServeTLS())
 	log.Println("looks good")
 
 	lsnr, err := net.Listen("tcp", fmt.Sprintf(":%d", cfg.Port))
@@ -27,10 +29,22 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// TODO(toru): Run the web app in a dedicated goroutine.
-	if cfg.canServeTLS() {
-		log.Fatal(http.ServeTLS(lsnr, nil, cfg.CertPath, cfg.KeyPath))
-	} else {
-		log.Fatal(http.Serve(lsnr, nil))
+	crash := make(chan error, 1)
+	sigs := make(chan os.Signal, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+	log.Printf("starting beamd... port:%d, tls:%t", cfg.Port, cfg.canServeTLS())
+	go func() {
+		if cfg.canServeTLS() {
+			crash <- http.ServeTLS(lsnr, nil, cfg.CertPath, cfg.KeyPath)
+		} else {
+			crash <- http.Serve(lsnr, nil)
+		}
+	}()
+
+	select {
+	case err := <-crash:
+		log.Printf("web server crashed: %v", err)
+	case sig := <-sigs:
+		log.Printf("received %s, quitting", sig.String())
 	}
 }
