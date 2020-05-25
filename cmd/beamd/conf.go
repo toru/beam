@@ -13,6 +13,7 @@ const (
 
 type config struct {
 	Store    string // Storage Engine name
+	Listen   string // TCP network address to listen on
 	Port     int    // Port to listen on
 	CertPath string `toml:"cert_path"` // Path to the TLS cert
 	KeyPath  string `toml:"key_path"`  // Path to the private key
@@ -47,6 +48,7 @@ func buildConfig() (config, error) {
 	flag.StringVar(&cfg.Store, "store", "memory", "storage engine name")
 	flag.StringVar(&cfg.CertPath, "cert", "", "path to the tls certificate")
 	flag.StringVar(&cfg.KeyPath, "key", "", "path to the private key")
+	flag.StringVar(&cfg.Listen, "l", "", "tcp network address to listen on")
 	flag.IntVar(&cfg.Port, "p", 8080, "port number to listen on")
 	flag.Parse()
 	// When a config path is present, consider the configuration file to
