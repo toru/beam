@@ -13,6 +13,13 @@ import (
 	"github.com/toru/beam/pkg/store"
 )
 
+func addrLabel(src string) string {
+	if len(src) == 0 {
+		return "*"
+	}
+	return src
+}
+
 func main() {
 	cfg, err := buildConfig()
 	if err != nil {
@@ -24,7 +31,7 @@ func main() {
 	}
 	log.Println("looks good")
 
-	lsnr, err := net.Listen("tcp", fmt.Sprintf(":%d", cfg.Port))
+	lsnr, err := net.Listen("tcp", fmt.Sprintf("%s:%d", cfg.Listen, cfg.Port))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -32,7 +39,8 @@ func main() {
 	crash := make(chan error, 1)
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
-	log.Printf("starting beamd... port:%d, tls:%t", cfg.Port, cfg.canServeTLS())
+	log.Printf("starting beamd... addr:%s, port:%d, tls:%t",
+		addrLabel(cfg.Listen), cfg.Port, cfg.canServeTLS())
 	go func() {
 		if cfg.canServeTLS() {
 			crash <- http.ServeTLS(lsnr, nil, cfg.CertPath, cfg.KeyPath)
