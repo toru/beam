@@ -4,7 +4,7 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/toru/beam/bookmark"
+	"github.com/toru/beam/pkg/bookmark"
 )
 
 func TestName(t *testing.T) {
