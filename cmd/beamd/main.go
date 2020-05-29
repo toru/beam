@@ -25,7 +25,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	_, err = store.GetStore(cfg.Store)
+	db, err := store.GetStore(cfg.Store)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -42,6 +42,7 @@ func main() {
 	log.Printf("starting beamd... addr:%s, port:%d, tls:%t",
 		addrLabel(cfg.Listen), cfg.Port, cfg.canServeTLS())
 	go func() {
+		loadWebHandlers(db)
 		if cfg.canServeTLS() {
 			crash <- http.ServeTLS(lsnr, nil, cfg.CertPath, cfg.KeyPath)
 		} else {
