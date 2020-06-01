@@ -2,6 +2,7 @@ package store
 
 import (
 	"sync"
+	"time"
 
 	"github.com/toru/beam/pkg/bookmark"
 )
@@ -47,6 +48,8 @@ func (s MemoryStore) BookmarkCount() int {
 func (s MemoryStore) WriteBookmark(item bookmark.Item) error {
 	s.mux.Lock()
 	defer s.mux.Unlock()
+	item.CreatedAt = time.Now().UTC()
+	item.UpdatedAt = item.CreatedAt
 	s.bookmarks[item.HexID()] = item
 	return nil
 }
