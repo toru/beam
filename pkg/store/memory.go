@@ -50,6 +50,6 @@ func (s MemoryStore) WriteBookmark(item bookmark.Item) error {
 	defer s.mux.Unlock()
 	item.CreatedAt = time.Now().UTC()
 	item.UpdatedAt = item.CreatedAt
-	s.bookmarks[item.HexID()] = item
+	s.bookmarks[item.HexID()] = item.Dup()
 	return nil
 }
