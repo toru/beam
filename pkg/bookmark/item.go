@@ -61,6 +61,14 @@ func (item *Item) HashAlgo() int {
 	return item.hashAlgo
 }
 
+// Dup returns a copy of the given Item pointer value.
+func (item *Item) Dup() Item {
+	dup := *item
+	dup.id = make([]byte, len(item.id))
+	copy(dup.id, item.id)
+	return dup
+}
+
 func hash(algo int, urlStr string) []byte {
 	if algo != AlgoSHA1 {
 		return nil
