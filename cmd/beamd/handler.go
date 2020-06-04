@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/toru/beam/pkg/bookmark"
 	"github.com/toru/beam/pkg/store"
@@ -14,6 +15,12 @@ func render400(w http.ResponseWriter) {
 
 func render404(w http.ResponseWriter) {
 	http.Error(w, strconv.Quote("not found"), http.StatusNotFound)
+}
+
+func splitPath(path string) []string {
+	return strings.FieldsFunc(path, func(c rune) bool {
+		return c == '/'
+	})
 }
 
 func bookmarksResourceHandlerFunc(db store.Store) http.HandlerFunc {
