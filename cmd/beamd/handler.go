@@ -25,8 +25,14 @@ func splitPath(path string) []string {
 
 func bookmarksResourceHandlerFunc(db store.Store) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		tokens := splitPath(r.URL.Path)
+		numTokens := len(tokens)
 		switch r.Method {
 		case http.MethodPost:
+			if numTokens > 1 {
+				render404(w)
+				return
+			}
 			bookmarkURL := r.PostFormValue("url")
 			if len(bookmarkURL) == 0 {
 				render400(w)
@@ -49,5 +55,7 @@ func bookmarksResourceHandlerFunc(db store.Store) http.HandlerFunc {
 }
 
 func loadWebHandlers(db store.Store) {
+	// TODO(toru): Write a wrapper to eliminate this nonsensical redundancy.
 	http.Handle("/bookmarks", bookmarksResourceHandlerFunc(db))
+	http.Handle("/bookmarks/", bookmarksResourceHandlerFunc(db))
 }
