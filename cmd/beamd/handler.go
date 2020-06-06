@@ -55,7 +55,5 @@ func bookmarksResourceHandlerFunc(db store.Store) http.HandlerFunc {
 }
 
 func loadWebHandlers(db store.Store) {
-	// TODO(toru): Write a wrapper to eliminate this nonsensical redundancy.
 	http.Handle("/bookmarks", bookmarksResourceHandlerFunc(db))
-	http.Handle("/bookmarks/", bookmarksResourceHandlerFunc(db))
 }
