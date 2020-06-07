@@ -9,6 +9,14 @@ import (
 	"github.com/toru/beam/pkg/store"
 )
 
+// BeamApp is an experimental struct that implements the Handler interface.
+type BeamApp struct{}
+
+func (app *BeamApp) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("server", "beam")
+	http.DefaultServeMux.ServeHTTP(w,r)
+}
+
 func render400(w http.ResponseWriter) {
 	http.Error(w, strconv.Quote("bad request"), http.StatusBadRequest)
 }
