@@ -14,7 +14,7 @@ type BeamApp struct{}
 
 func (app *BeamApp) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("server", "beam")
-	http.DefaultServeMux.ServeHTTP(w,r)
+	http.DefaultServeMux.ServeHTTP(w, r)
 }
 
 func render400(w http.ResponseWriter) {

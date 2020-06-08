@@ -44,9 +44,9 @@ func main() {
 	go func() {
 		loadWebHandlers(db)
 		if cfg.canServeTLS() {
-			crash <- http.ServeTLS(lsnr, nil, cfg.CertPath, cfg.KeyPath)
+			crash <- http.ServeTLS(lsnr, &BeamApp{}, cfg.CertPath, cfg.KeyPath)
 		} else {
-			crash <- http.Serve(lsnr, nil)
+			crash <- http.Serve(lsnr, &BeamApp{})
 		}
 	}()
 
