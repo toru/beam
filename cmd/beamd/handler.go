@@ -10,7 +10,13 @@ import (
 )
 
 // BeamApp is an experimental struct that implements the Handler interface.
-type BeamApp struct{}
+type BeamApp struct {
+	db store.Store
+}
+
+func NewBeamApp(db store.Store) *BeamApp {
+	return &BeamApp{db: db}
+}
 
 func (app *BeamApp) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("server", "beam")
