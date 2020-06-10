@@ -43,10 +43,11 @@ func main() {
 		addrLabel(cfg.Listen), cfg.Port, cfg.canServeTLS())
 	go func() {
 		loadWebHandlers(db)
+		app := NewBeamApp(db)
 		if cfg.canServeTLS() {
-			crash <- http.ServeTLS(lsnr, &BeamApp{}, cfg.CertPath, cfg.KeyPath)
+			crash <- http.ServeTLS(lsnr, app, cfg.CertPath, cfg.KeyPath)
 		} else {
-			crash <- http.Serve(lsnr, &BeamApp{})
+			crash <- http.Serve(lsnr, app)
 		}
 	}()
 
