@@ -18,7 +18,7 @@ type BeamApp struct {
 func NewBeamApp(db store.Store) *BeamApp {
 	app := &BeamApp{db: db}
 	app.mux = http.NewServeMux()
-	app.mux.Handle("/bookmarks", bookmarksResourceHandlerFunc(db))
+	app.mux.HandleFunc("/bookmarks", app.handleBookmark)
 	return app
 }
 
@@ -27,22 +27,7 @@ func (app *BeamApp) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	app.mux.ServeHTTP(w, r)
 }
 
-func render400(w http.ResponseWriter) {
-	http.Error(w, strconv.Quote("bad request"), http.StatusBadRequest)
-}
-
-func render404(w http.ResponseWriter) {
-	http.Error(w, strconv.Quote("not found"), http.StatusNotFound)
-}
-
-func splitPath(path string) []string {
-	return strings.FieldsFunc(path, func(c rune) bool {
-		return c == '/'
-	})
-}
-
-func bookmarksResourceHandlerFunc(db store.Store) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
+func (app *BeamApp) handleBookmark(w http.ResponseWriter, r *http.Request) {
 		tokens := splitPath(r.URL.Path)
 		numTokens := len(tokens)
 		switch r.Method {
@@ -61,7 +46,7 @@ func bookmarksResourceHandlerFunc(db store.Store) http.HandlerFunc {
 				render400(w)
 				return
 			}
-			if err := db.WriteBookmark(*item); err != nil {
+			if err := app.db.WriteBookmark(*item); err != nil {
 				render400(w)
 				return
 			}
@@ -69,5 +54,18 @@ func bookmarksResourceHandlerFunc(db store.Store) http.HandlerFunc {
 		default:
 			render404(w)
 		}
-	}
+}
+
+func render400(w http.ResponseWriter) {
+	http.Error(w, strconv.Quote("bad request"), http.StatusBadRequest)
+}
+
+func render404(w http.ResponseWriter) {
+	http.Error(w, strconv.Quote("not found"), http.StatusNotFound)
+}
+
+func splitPath(path string) []string {
+	return strings.FieldsFunc(path, func(c rune) bool {
+		return c == '/'
+	})
 }
