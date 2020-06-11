@@ -11,7 +11,7 @@ import (
 
 // BeamApp is an experimental struct that implements the Handler interface.
 type BeamApp struct {
-	db store.Store
+	db  store.Store
 	mux *http.ServeMux
 }
 
@@ -28,32 +28,32 @@ func (app *BeamApp) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *BeamApp) handleBookmark(w http.ResponseWriter, r *http.Request) {
-		tokens := splitPath(r.URL.Path)
-		numTokens := len(tokens)
-		switch r.Method {
-		case http.MethodPost:
-			if numTokens > 1 {
-				render404(w)
-				return
-			}
-			bookmarkURL := r.PostFormValue("url")
-			if len(bookmarkURL) == 0 {
-				render400(w)
-				return
-			}
-			item := bookmark.NewItem()
-			if err := item.SetURL(bookmarkURL); err != nil {
-				render400(w)
-				return
-			}
-			if err := app.db.WriteBookmark(*item); err != nil {
-				render400(w)
-				return
-			}
-			w.Write([]byte(strconv.Quote("lazy ok")))
-		default:
+	tokens := splitPath(r.URL.Path)
+	numTokens := len(tokens)
+	switch r.Method {
+	case http.MethodPost:
+		if numTokens > 1 {
 			render404(w)
+			return
 		}
+		bookmarkURL := r.PostFormValue("url")
+		if len(bookmarkURL) == 0 {
+			render400(w)
+			return
+		}
+		item := bookmark.NewItem()
+		if err := item.SetURL(bookmarkURL); err != nil {
+			render400(w)
+			return
+		}
+		if err := app.db.WriteBookmark(*item); err != nil {
+			render400(w)
+			return
+		}
+		w.Write([]byte(strconv.Quote("lazy ok")))
+	default:
+		render404(w)
+	}
 }
 
 func render400(w http.ResponseWriter) {
