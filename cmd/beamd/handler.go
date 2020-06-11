@@ -12,15 +12,19 @@ import (
 // BeamApp is an experimental struct that implements the Handler interface.
 type BeamApp struct {
 	db store.Store
+	mux *http.ServeMux
 }
 
 func NewBeamApp(db store.Store) *BeamApp {
-	return &BeamApp{db: db}
+	app := &BeamApp{db: db}
+	app.mux = http.NewServeMux()
+	app.mux.Handle("/bookmarks", bookmarksResourceHandlerFunc(db))
+	return app
 }
 
 func (app *BeamApp) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("server", "beam")
-	http.DefaultServeMux.ServeHTTP(w, r)
+	app.mux.ServeHTTP(w, r)
 }
 
 func render400(w http.ResponseWriter) {
@@ -66,8 +70,4 @@ func bookmarksResourceHandlerFunc(db store.Store) http.HandlerFunc {
 			render404(w)
 		}
 	}
-}
-
-func loadWebHandlers(db store.Store) {
-	http.Handle("/bookmarks", bookmarksResourceHandlerFunc(db))
 }
