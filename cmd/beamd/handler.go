@@ -19,6 +19,7 @@ func NewBeamApp(db store.Store) *BeamApp {
 	app := &BeamApp{db: db}
 	app.mux = http.NewServeMux()
 	app.mux.HandleFunc("/bookmarks", app.handleBookmark)
+	app.mux.HandleFunc("/bookmarks/count", app.handleBookmarkCount)
 	return app
 }
 
@@ -54,6 +55,14 @@ func (app *BeamApp) handleBookmark(w http.ResponseWriter, r *http.Request) {
 	default:
 		render404(w)
 	}
+}
+
+func (app *BeamApp) handleBookmarkCount(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		render404(w)
+		return
+	}
+	w.Write([]byte(strconv.Itoa(app.db.BookmarkCount())))
 }
 
 func render400(w http.ResponseWriter) {
