@@ -9,6 +9,16 @@ import (
 	"github.com/toru/beam/pkg/store"
 )
 
+func getOnly(next http.HandlerFunc) http.HandlerFunc {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			render404(w)
+			return
+		}
+		next.ServeHTTP(w, r)
+	})
+}
+
 // BeamApp is an experimental struct that implements the Handler interface.
 type BeamApp struct {
 	db  store.Store
@@ -19,7 +29,7 @@ func NewBeamApp(db store.Store) *BeamApp {
 	app := &BeamApp{db: db}
 	app.mux = http.NewServeMux()
 	app.mux.HandleFunc("/bookmarks", app.handleBookmark)
-	app.mux.HandleFunc("/bookmarks/count", app.handleBookmarkCount)
+	app.mux.HandleFunc("/bookmarks/count", getOnly(app.handleBookmarkCount))
 	return app
 }
 
@@ -58,10 +68,6 @@ func (app *BeamApp) handleBookmark(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *BeamApp) handleBookmarkCount(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		render404(w)
-		return
-	}
 	w.Write([]byte(strconv.Itoa(app.db.BookmarkCount())))
 }
 
