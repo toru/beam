@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -62,6 +64,21 @@ func (app *BeamApp) handleBookmark(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		w.Write([]byte(strconv.Quote("lazy ok")))
+	case http.MethodGet:
+		if numTokens > 1 {
+			render404(w)
+			return
+		}
+		bookmarks := make([]bookmark.Item, 0, app.db.BookmarkCount())
+		for _, bookmark := range app.db.Bookmarks(0) {
+			bookmarks = append(bookmarks, bookmark)
+		}
+		buf, err := json.Marshal(bookmarks)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		w.Write(buf)
 	default:
 		render404(w)
 	}
