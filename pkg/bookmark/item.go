@@ -4,6 +4,7 @@ package bookmark
 import (
 	"crypto/sha1"
 	"encoding/hex"
+	"encoding/json"
 	"net/url"
 	"time"
 )
@@ -67,6 +68,21 @@ func (item *Item) Dup() Item {
 	dup.id = make([]byte, len(item.id))
 	copy(dup.id, item.id)
 	return dup
+}
+
+// MarshalJSON implements the json.Marsharler interface.
+func (item Item) MarshalJSON() ([]byte, error) {
+	return json.Marshal(struct {
+		ID        string    `json:"id"`
+		URL       string    `json:"url"`
+		CreatedAt time.Time `json:"created_at"`
+		UpdatedAt time.Time `json:"updated_at"`
+	}{
+		ID:        item.HexID(),
+		URL:       item.URL(),
+		CreatedAt: item.CreatedAt,
+		UpdatedAt: item.UpdatedAt,
+	})
 }
 
 func hash(algo int, urlStr string) []byte {
