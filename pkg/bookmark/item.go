@@ -75,11 +75,13 @@ func (item Item) MarshalJSON() ([]byte, error) {
 	return json.Marshal(struct {
 		ID        string    `json:"id"`
 		URL       string    `json:"url"`
+		Name      string    `json:"name"`
 		CreatedAt time.Time `json:"created_at"`
 		UpdatedAt time.Time `json:"updated_at"`
 	}{
 		ID:        item.HexID(),
 		URL:       item.URL(),
+		Name:      item.Name,
 		CreatedAt: item.CreatedAt,
 		UpdatedAt: item.UpdatedAt,
 	})
