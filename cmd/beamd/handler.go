@@ -40,6 +40,14 @@ func (app *BeamApp) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	app.mux.ServeHTTP(w, r)
 }
 
+func (app *BeamApp) getBookmarks() []bookmark.Item {
+	bookmarks := make([]bookmark.Item, 0, app.db.BookmarkCount())
+	for _, bookmark := range app.db.Bookmarks(0) {
+		bookmarks = append(bookmarks, bookmark)
+	}
+	return bookmarks
+}
+
 func (app *BeamApp) handleBookmark(w http.ResponseWriter, r *http.Request) {
 	tokens := splitPath(r.URL.Path)
 	numTokens := len(tokens)
@@ -65,20 +73,17 @@ func (app *BeamApp) handleBookmark(w http.ResponseWriter, r *http.Request) {
 		}
 		w.Write([]byte(strconv.Quote("lazy ok")))
 	case http.MethodGet:
-		if numTokens > 1 {
+		if numTokens == 1 {
+			buf, err := json.Marshal(app.getBookmarks())
+			if err != nil {
+				log.Println(err)
+				return
+			}
+			w.Write(buf)
+		} else {
 			render404(w)
 			return
 		}
-		bookmarks := make([]bookmark.Item, 0, app.db.BookmarkCount())
-		for _, bookmark := range app.db.Bookmarks(0) {
-			bookmarks = append(bookmarks, bookmark)
-		}
-		buf, err := json.Marshal(bookmarks)
-		if err != nil {
-			log.Println(err)
-			return
-		}
-		w.Write(buf)
 	default:
 		render404(w)
 	}
