@@ -77,6 +77,7 @@ func (app *BeamApp) handleBookmark(w http.ResponseWriter, r *http.Request) {
 			buf, err := json.Marshal(app.getBookmarks())
 			if err != nil {
 				log.Println(err)
+				render500(w)
 				return
 			}
 			w.Write(buf)
@@ -93,12 +94,16 @@ func (app *BeamApp) handleBookmarkCount(w http.ResponseWriter, r *http.Request) 
 	w.Write([]byte(strconv.Itoa(app.db.BookmarkCount())))
 }
 
-func render400(w http.ResponseWriter) {
-	http.Error(w, strconv.Quote("bad request"), http.StatusBadRequest)
+func render500(w http.ResponseWriter) {
+	http.Error(w, strconv.Quote("table flip"), http.StatusInternalServerError)
 }
 
 func render404(w http.ResponseWriter) {
 	http.Error(w, strconv.Quote("not found"), http.StatusNotFound)
+}
+
+func render400(w http.ResponseWriter) {
+	http.Error(w, strconv.Quote("bad request"), http.StatusBadRequest)
 }
 
 func splitPath(path string) []string {
