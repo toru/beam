@@ -71,7 +71,13 @@ func (app *BeamApp) handleBookmark(w http.ResponseWriter, r *http.Request) {
 			render400(w)
 			return
 		}
-		w.Write([]byte(strconv.Quote("lazy ok")))
+		buf, err := json.Marshal(item)
+		if err != nil {
+			log.Println(err)
+			render500(w)
+			return
+		}
+		w.Write(buf)
 	case http.MethodGet:
 		if numTokens == 1 {
 			buf, err := json.Marshal(app.getBookmarks())
