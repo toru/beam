@@ -45,7 +45,7 @@ func (s MemoryStore) BookmarkCount() int {
 }
 
 // WriteBookmark implements the Store interface
-func (s MemoryStore) WriteBookmark(item bookmark.Item) error {
+func (s MemoryStore) WriteBookmark(item *bookmark.Item) error {
 	s.mux.Lock()
 	defer s.mux.Unlock()
 	item.CreatedAt = time.Now().UTC()

@@ -67,7 +67,7 @@ func (app *BeamApp) handleBookmark(w http.ResponseWriter, r *http.Request) {
 			render400(w)
 			return
 		}
-		if err := app.db.WriteBookmark(*item); err != nil {
+		if err := app.db.WriteBookmark(item); err != nil {
 			render400(w)
 			return
 		}
