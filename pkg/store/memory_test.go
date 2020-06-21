@@ -56,6 +56,23 @@ func TestBookmarkCount(t *testing.T) {
 	}
 }
 
+func TestGetBookmark(t *testing.T) {
+	db := NewMemoryStore()
+	item := bookmark.NewItem()
+	item.SetURL("https://torumk.com/")
+	if err := db.WriteBookmark(item); err != nil {
+		t.Error(err)
+	}
+	_, ok := db.GetBookmark("bogus")
+	if ok {
+		t.Errorf("Got: %t, Want: false", ok)
+	}
+	_, ok = db.GetBookmark(item.HexID())
+	if !ok {
+		t.Errorf("Got: %t, Want: true", ok)
+	}
+}
+
 func TestWriteBookmark(t *testing.T) {
 	db := NewMemoryStore()
 	item := bookmark.NewItem()

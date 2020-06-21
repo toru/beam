@@ -44,6 +44,14 @@ func (s MemoryStore) BookmarkCount() int {
 	return len(s.bookmarks)
 }
 
+// GetBookmark implements the Store interface
+func (s MemoryStore) GetBookmark(id string) (bookmark.Item, bool) {
+	s.mux.RLock()
+	item, ok := s.bookmarks[id]
+	s.mux.RUnlock()
+	return item, ok
+}
+
 // WriteBookmark implements the Store interface
 func (s MemoryStore) WriteBookmark(item *bookmark.Item) error {
 	s.mux.Lock()
