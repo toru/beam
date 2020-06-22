@@ -31,6 +31,7 @@ func NewBeamApp(db store.Store) *BeamApp {
 	app := &BeamApp{db: db}
 	app.mux = http.NewServeMux()
 	app.mux.HandleFunc("/bookmarks", app.handleBookmark)
+	app.mux.HandleFunc("/bookmarks/", app.handleBookmark)
 	app.mux.HandleFunc("/bookmarks/count", getOnly(app.handleBookmarkCount))
 	return app
 }
@@ -53,7 +54,7 @@ func (app *BeamApp) handleBookmark(w http.ResponseWriter, r *http.Request) {
 	numTokens := len(tokens)
 	switch r.Method {
 	case http.MethodPost:
-		if numTokens > 1 {
+		if numTokens > 2 {
 			render404(w)
 			return
 		}
@@ -81,6 +82,20 @@ func (app *BeamApp) handleBookmark(w http.ResponseWriter, r *http.Request) {
 	case http.MethodGet:
 		if numTokens == 1 {
 			buf, err := json.Marshal(app.getBookmarks())
+			if err != nil {
+				log.Println(err)
+				render500(w)
+				return
+			}
+			w.Write(buf)
+		} else if numTokens == 2 {
+			id := tokens[1]
+			item, ok := app.db.GetBookmark(id)
+			if !ok {
+				render404(w)
+				return
+			}
+			buf, err := json.Marshal(item)
 			if err != nil {
 				log.Println(err)
 				render500(w)
