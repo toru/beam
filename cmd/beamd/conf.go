@@ -17,6 +17,7 @@ type config struct {
 	Port     int    // Port to listen on
 	CertPath string `toml:"cert_path"` // Path to the TLS cert
 	KeyPath  string `toml:"key_path"`  // Path to the private key
+	DataPath string `toml:"data_path"` // Path to the data directory
 }
 
 func fillMissingWithDefault(cfg *config) {
