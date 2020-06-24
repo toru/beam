@@ -15,7 +15,7 @@ type MemoryStore struct {
 }
 
 // NewMemoryStore returns a pointer to a new MemoryStore
-func NewMemoryStore() *MemoryStore {
+func NewMemoryStore(_ string) *MemoryStore {
 	ret := &MemoryStore{}
 	ret.bookmarks = make(map[string]bookmark.Item)
 	return ret

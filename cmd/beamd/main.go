@@ -25,7 +25,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	db, err := store.GetStore(cfg.Store)
+	db, err := store.GetStore(cfg.Store, cfg.DataPath)
 	if err != nil {
 		log.Fatal(err)
 	}

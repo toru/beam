@@ -8,7 +8,7 @@ import (
 )
 
 func TestName(t *testing.T) {
-	db := NewMemoryStore()
+	db := NewMemoryStore("/tmp/beam")
 	got := db.Name()
 	want := "Memory Store"
 	if got != want {
@@ -17,7 +17,7 @@ func TestName(t *testing.T) {
 }
 
 func TestBookmarks(t *testing.T) {
-	db := NewMemoryStore()
+	db := NewMemoryStore("/tmp/beam")
 	i1 := bookmark.NewItem()
 	i1.SetURL("https://torumk.com/")
 	i2 := bookmark.NewItem()
@@ -42,7 +42,7 @@ func TestBookmarks(t *testing.T) {
 }
 
 func TestBookmarkCount(t *testing.T) {
-	db := NewMemoryStore()
+	db := NewMemoryStore("/tmp/beam")
 	i1 := bookmark.NewItem()
 	i1.SetURL("https://torumk.com/")
 	i2 := bookmark.NewItem()
@@ -57,7 +57,7 @@ func TestBookmarkCount(t *testing.T) {
 }
 
 func TestGetBookmark(t *testing.T) {
-	db := NewMemoryStore()
+	db := NewMemoryStore("/tmp/beam")
 	item := bookmark.NewItem()
 	item.SetURL("https://torumk.com/")
 	if err := db.WriteBookmark(item); err != nil {
@@ -74,7 +74,7 @@ func TestGetBookmark(t *testing.T) {
 }
 
 func TestWriteBookmark(t *testing.T) {
-	db := NewMemoryStore()
+	db := NewMemoryStore("/tmp/beam")
 	item := bookmark.NewItem()
 	item.SetURL("https://torumk.com/")
 	if err := db.WriteBookmark(item); err != nil {
