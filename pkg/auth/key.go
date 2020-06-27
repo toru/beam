@@ -20,8 +20,8 @@ func NewKey() *Key {
 }
 
 // Dup returns a copy of the given Key pointer value.
-func (key *Key) Dup() Item {
-	dup := key*
+func (key *Key) Dup() Key {
+	dup := *key
 	dup.Token = make([]byte, len(key.Token))
 	copy(dup.Token, key.Token)
 	return dup
