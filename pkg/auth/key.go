@@ -2,6 +2,7 @@
 package auth
 
 import (
+	"encoding/hex"
 	"time"
 )
 
@@ -17,6 +18,11 @@ type Key struct {
 // NewKey returns a pointer to a new Key.
 func NewKey() *Key {
 	return &Key{}
+}
+
+// HexToken returns the hexadecimal string representation of the token.
+func (key *Key) HexToken() string {
+	return hex.EncodeToString(key.Token)
 }
 
 // Dup returns a copy of the given Key pointer value.
