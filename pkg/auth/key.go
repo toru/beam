@@ -2,7 +2,9 @@
 package auth
 
 import (
+	"crypto/rand"
 	"encoding/hex"
+	"log"
 	"time"
 )
 
@@ -17,7 +19,7 @@ type Key struct {
 
 // NewKey returns a pointer to a new Key.
 func NewKey() *Key {
-	return &Key{}
+	return &Key{Token: genToken()}
 }
 
 // HexToken returns the hexadecimal string representation of the token.
@@ -31,4 +33,13 @@ func (key *Key) Dup() Key {
 	dup.Token = make([]byte, len(key.Token))
 	copy(dup.Token, key.Token)
 	return dup
+}
+
+func genToken() []byte {
+	b := make([]byte, 16)
+	_, err := rand.Read(b)
+	if err != nil {
+		log.Println(err)
+	}
+	return b
 }
