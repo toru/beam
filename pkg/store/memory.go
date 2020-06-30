@@ -4,6 +4,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/toru/beam/pkg/auth"
 	"github.com/toru/beam/pkg/bookmark"
 )
 
@@ -11,6 +12,7 @@ import (
 // implementation. MemoryStore is unsuited for production.
 type MemoryStore struct {
 	mux       sync.RWMutex
+	authKeys  map[string]auth.Key
 	bookmarks map[string]bookmark.Item
 }
 
