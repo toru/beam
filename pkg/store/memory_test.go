@@ -80,4 +80,12 @@ func TestWriteBookmark(t *testing.T) {
 	if err := db.WriteBookmark(item); err != nil {
 		t.Error(err)
 	}
+	// Test the timestamp handling
+	created := item.CreatedAt
+	if err := db.WriteBookmark(item); err != nil {
+		t.Error(err)
+	}
+	if item.CreatedAt != created {
+		t.Errorf("Got: %s, Want: %s", item.CreatedAt.String(), created.String())
+	}
 }
