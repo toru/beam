@@ -58,10 +58,11 @@ func (s MemoryStore) GetBookmark(id string) (bookmark.Item, bool) {
 func (s MemoryStore) WriteBookmark(item *bookmark.Item) error {
 	s.mux.Lock()
 	defer s.mux.Unlock()
+	now := time.Now().UTC()
 	if item.CreatedAt.IsZero() {
-		item.CreatedAt = time.Now().UTC()
+		item.CreatedAt = now
 	}
-	item.UpdatedAt = item.CreatedAt
+	item.UpdatedAt = now
 	s.bookmarks[item.HexID()] = item.Dup()
 	return nil
 }
