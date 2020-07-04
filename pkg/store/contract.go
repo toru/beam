@@ -4,6 +4,7 @@ package store
 import (
 	"fmt"
 
+	"github.com/toru/beam/pkg/auth"
 	"github.com/toru/beam/pkg/bookmark"
 )
 
@@ -14,6 +15,7 @@ type Store interface {
 	BookmarkCount() int                          // Number of bookmarks
 	GetBookmark(id string) (bookmark.Item, bool) // Get a bookmark by its unique ID
 	WriteBookmark(*bookmark.Item) error          // Write the given bookmark
+	WriteAuthKey(*auth.Key) error                // Write the given auth key
 }
 
 // GetStore returns the specified Storage Engine.

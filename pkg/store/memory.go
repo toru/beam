@@ -66,3 +66,16 @@ func (s MemoryStore) WriteBookmark(item *bookmark.Item) error {
 	s.bookmarks[item.HexID()] = item.Dup()
 	return nil
 }
+
+// WriteAuthKey implements the Store interface
+func (s MemoryStore) WriteAuthKey(key *auth.Key) error {
+	s.mux.Lock()
+	defer s.mux.Unlock()
+	now := time.Now().UTC()
+	if key.CreatedAt.IsZero() {
+		key.CreatedAt = now
+	}
+	key.UpdatedAt = now
+	s.authKeys[key.HexToken()] = key.Dup()
+	return nil
+}
