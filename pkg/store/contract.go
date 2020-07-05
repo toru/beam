@@ -15,6 +15,7 @@ type Store interface {
 	BookmarkCount() int                          // Number of bookmarks
 	GetBookmark(id string) (bookmark.Item, bool) // Get a bookmark by its unique ID
 	WriteBookmark(*bookmark.Item) error          // Write the given bookmark
+	GetAuthKey(token string) (auth.Key, bool)    // Get an auth key by its token
 	WriteAuthKey(*auth.Key) error                // Write the given auth key
 }
 

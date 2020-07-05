@@ -68,6 +68,14 @@ func (s MemoryStore) WriteBookmark(item *bookmark.Item) error {
 }
 
 // WriteAuthKey implements the Store interface
+func (s MemoryStore) GetAuthKey(token string) (auth.Key, bool) {
+	s.mux.RLock()
+	defer s.mux.RUnlock()
+	key, ok := s.authKeys[token]
+	return key, ok
+}
+
+// WriteAuthKey implements the Store interface
 func (s MemoryStore) WriteAuthKey(key *auth.Key) error {
 	s.mux.Lock()
 	defer s.mux.Unlock()
