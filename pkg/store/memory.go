@@ -19,6 +19,7 @@ type MemoryStore struct {
 // NewMemoryStore returns a pointer to a new MemoryStore
 func NewMemoryStore(_ string) *MemoryStore {
 	ret := &MemoryStore{}
+	ret.authKeys = make(map[string]auth.Key)
 	ret.bookmarks = make(map[string]bookmark.Item)
 	return ret
 }
