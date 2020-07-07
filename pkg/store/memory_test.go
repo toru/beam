@@ -4,6 +4,7 @@ import (
 	"sort"
 	"testing"
 
+	"github.com/toru/beam/pkg/auth"
 	"github.com/toru/beam/pkg/bookmark"
 )
 
@@ -87,5 +88,17 @@ func TestWriteBookmark(t *testing.T) {
 	}
 	if item.CreatedAt != created {
 		t.Errorf("Got: %s, Want: %s", item.CreatedAt.String(), created.String())
+	}
+}
+
+func TestWriteAuthKey(t *testing.T) {
+	db := NewMemoryStore("/tmp/beam")
+	key := auth.NewKey()
+	if err := db.WriteAuthKey(key); err != nil {
+		t.Error(err)
+	}
+	_, ok := db.GetAuthKey(key.HexToken())
+	if !ok {
+		t.Errorf("Got: %t, Want: true", ok)
 	}
 }
