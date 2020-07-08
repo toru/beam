@@ -123,6 +123,10 @@ func render404(w http.ResponseWriter) {
 	http.Error(w, strconv.Quote("not found"), http.StatusNotFound)
 }
 
+func render401(w http.ResponseWriter) {
+	http.Error(w, strconv.Quote("unauthorized"), http.StatusUnauthorized)
+}
+
 func render400(w http.ResponseWriter) {
 	http.Error(w, strconv.Quote("bad request"), http.StatusBadRequest)
 }
