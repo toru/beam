@@ -18,6 +18,7 @@ type config struct {
 	CertPath string `toml:"cert_path"` // Path to the TLS cert
 	KeyPath  string `toml:"key_path"`  // Path to the private key
 	DataPath string `toml:"data_path"` // Path to the data directory
+	NoAuth   bool   `toml:"no_auth"`   // Indicates if auth is disabled
 }
 
 func fillMissingWithDefault(cfg *config) {
@@ -51,6 +52,7 @@ func buildConfig() (config, error) {
 	flag.StringVar(&cfg.KeyPath, "key", "", "path to the private key")
 	flag.StringVar(&cfg.Listen, "l", "", "tcp network address to listen on")
 	flag.IntVar(&cfg.Port, "p", 8080, "port number to listen on")
+	flag.BoolVar(&cfg.NoAuth, "noauth", false, "disable authentication")
 	flag.Parse()
 	// When a config path is present, consider the configuration file to
 	// be the one and only source of configuration entries.
