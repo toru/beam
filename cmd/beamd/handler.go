@@ -23,12 +23,13 @@ func getOnly(next http.HandlerFunc) http.HandlerFunc {
 
 // BeamApp is an experimental struct that implements the Handler interface.
 type BeamApp struct {
+	cfg config
 	db  store.Store
 	mux *http.ServeMux
 }
 
-func NewBeamApp(db store.Store) *BeamApp {
-	app := &BeamApp{db: db}
+func NewBeamApp(cfg config, db store.Store) *BeamApp {
+	app := &BeamApp{cfg: cfg, db: db}
 	app.mux = http.NewServeMux()
 	app.mux.HandleFunc("/bookmarks", app.handleBookmark)
 	app.mux.HandleFunc("/bookmarks/", app.handleBookmark)

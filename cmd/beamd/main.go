@@ -42,7 +42,7 @@ func main() {
 	log.Printf("starting beamd... addr:%s, port:%d, tls:%t",
 		addrLabel(cfg.Listen), cfg.Port, cfg.canServeTLS())
 	go func() {
-		app := NewBeamApp(db)
+		app := NewBeamApp(cfg, db)
 		if cfg.canServeTLS() {
 			crash <- http.ServeTLS(lsnr, app, cfg.CertPath, cfg.KeyPath)
 		} else {
