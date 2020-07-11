@@ -25,3 +25,19 @@ beamd with the [example configuration file](https://github.com/toru/beam/blob/ma
 $ beamd -c examples/beamd.conf
 20XX/0X/XX HH:MM:SS starting beamd... addr:*, port:8080, tls:true
 ```
+
+### Writing a Bookmark
+
+Submit a POST request to the `/bookmarks` resource with a `url` parameter.
+Beam will respond with the JSON representation of the newly created bookmark.
+
+```
+$ curl -s -d "url=https://github.com/toru/beam" http://localhost:8080/bookmarks | jq
+{
+  "id": "5e6bc975f53048d0641900388e3c34394d12fa02",
+  "url": "https://github.com/toru/beam",
+  "name": "",
+  "created_at": "2020-07-11T01:23:45.45343Z",
+  "updated_at": "2020-07-11T01:23:45.45343Z"
+}
+```

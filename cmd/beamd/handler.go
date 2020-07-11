@@ -21,7 +21,7 @@ func getOnly(next http.HandlerFunc) http.HandlerFunc {
 	})
 }
 
-// BeamApp is an experimental struct that implements the Handler interface.
+// BeamApp implements the Beam Web API application.
 type BeamApp struct {
 	cfg config
 	db  store.Store
